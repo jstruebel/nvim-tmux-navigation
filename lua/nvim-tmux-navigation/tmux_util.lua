@@ -8,7 +8,11 @@ local tmux_directions = { ['p'] = 'l', ['h'] = 'L', ['j'] = 'D', ['k'] = 'U', ['
 -- the check if tmux is actually running (so the variable $TMUX is
 -- not nil) is made before actually calling this function
 local function tmux_command(command)
-    local tmux_socket = vim.fn.split(vim.env.TMUX, ',')[1]
+    local tmux_split = 1
+    if (vim.fn.has("win32") or vim.fn.has("win64")) == 1 then
+        tmux_split = 2
+    end
+    local tmux_socket = vim.split(vim.env.TMUX, ',')[tmux_split]
     return vim.fn.system("tmux -S " .. tmux_socket .. " " .. command)
 end
 
